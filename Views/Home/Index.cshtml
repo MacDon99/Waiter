@@ -1,8 +1,85 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model TableViewModel
+@{
+    ViewData["Title"] = "Tables";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form asp-controller="Home" asp-action="GetTableInfo">
+        <select id ="TableSelect" asp-for="TableName">
+            <option id = "None">Select Table</option>
+            <option id = "First">First</option>
+            <option id = "Second">Second</option>
+            <option id = "Third">Third</option>
+            <option id = "Fourth">Fourth</option>
+            <option id = "Fifth">Fifth</option>
+        </select>
+        <br>
+        <label id = "selectedItem">Please select a table.</label>
+        <br>
+        <input type="hidden">
+        <input id = "submitButton" type="submit" value="Get table info">
+        @if(Model != null)
+        {
+            <input type="hidden" asp-for="TableJson" value="@Model.TableJson">
+        }
+        <br>
+    </form>
+    <div id="AddingDishes" type = "hidden">
+        <input id = "saveButton" asp-action="GetTableInfo" asp-controller="Home" type="submit" value="Save">
+    @if(Model != null && Model.TableName != "Select Table" && Model.Table != null)
+    {
+    <form asp-action="AddDishToOrder" asp-controller="Home">
+        <select id ="DishSelect" asp-for="DishName">
+            <option id = "None">Select Dish</option>
+            <option id = "First">Chicken with fries</option>
+            <option id = "Second">Fish with potatoes</option>
+            <option id = "Third">Schnitzel with salad</option>
+            <option id = "Fourth">Hamburger</option>
+            <option id = "Fifth">Hot Dog</option>
+        </select>
+        <input type="text" asp-for="Quantity" placeholder="Quantity">
+        <input type = "hidden" asp-for="TableJson" value="@Model.TableJson">
+        <input type = "hidden" asp-for="TableName" value="@Model.TableName">
+        @* <input type = "hidden" asp-for="Table.TotalPrice" value="@Model.Table.TotalPrice">
+        <input type="hidden" asp-for="Table.Order" value="@Model.Table.Order"> *@
+        <input type = "submit" value="Add Dish to order">
+    </form>
+    }
+    @if(Model != null && Model.TableName != "Select Table")
+    {
+        <label>Table name: @Model.TableName</label>
+        <br>
+        <label>Price: @Model.Table.TotalPrice</label>
+        <br>
+        if(Model.Table.Order != null)
+        {
+            <h3><label>Order price: @Model.Table.Order.OrderPrice</label></h3>
+            <br>
+            @foreach (var dish in Model.Table.Order.Dishes)
+            {
+                <h5><label>Dish Name: @dish.DishName</label></h5>
+                <br>
+                <label>Dish Price: @dish.DishPrice</label>
+                <br>
+                <label>Dish count: @dish.Count</label>
+                <br>
+                <br>
+            }
+        }
+    }
+    </div>
+    @section scripts{
+        <script>
+        $("#TableSelect").change( function() {
+            $("#AddingDishes").hide()
+        });
+        @* $("#submitButton").click( function(){
+
+            $("#submitButton").prop("type", "hidden")
+        })
+        $("#saveButton").click(function(){
+            $("#submitButton").prop("type", "submit")
+        }) *@
+        </script>
+    }
 </div>

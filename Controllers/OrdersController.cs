@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Waiter.Data;
 using Waiter.Models;
+using Waiter.ViewModels;
 
 namespace Waiter.Controllers
 {
     public class OrdersController : Controller
     {
-        public OrdersController()
+        private readonly Seeder _seeder;
+        public OrdersController(Seeder seeder)
         {
+            _seeder = seeder;
+            _seeder.Seed();
         }
         [HttpGet]
         public IActionResult Index()
@@ -29,8 +29,7 @@ namespace Waiter.Controllers
                     JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString("Fifth")),
                 };
             var orderVM = new OrdersViewModel(){
-                Orders = orders,
-                OrdersJson = JsonConvert.SerializeObject(orders)
+                Orders = orders
             };
             return View(orderVM);
         }

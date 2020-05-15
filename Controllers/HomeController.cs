@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Waiter.Data;
 using Waiter.Models;
+using Waiter.ViewModels;
 
 namespace Waiter.Controllers
 {
@@ -19,43 +14,31 @@ namespace Waiter.Controllers
         public HomeController(Seeder seeder)
         {
             _seeder = seeder;
+            _seeder.Seed();
         }
         [HttpGet]
         public IActionResult Index(TableViewModel model)
         {
-            _seeder.Seed(this);
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            _seeder.Seed(this);
             return View();
         }
 
         [HttpPost]
         public IActionResult GetTableInfo(TableViewModel model)
         {
-            if(model.TableJson != null)
-            {
-                var table = JsonConvert.DeserializeObject<Table>(model.TableJson);
-                HttpContext.Session.SetString(table.TableName, JsonConvert.SerializeObject(table));
-            }
-            _seeder.Seed(this);
+                var tableFromSession = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
+
             if(model != null && model.TableName != null && model.TableName != "Select Table")
             {
             Table selectedTable = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
             model.Table = selectedTable;
-            model.TableJson = JsonConvert.SerializeObject(model.Table);
             }
             return View("Index", model);
         }
         [HttpPost]
         public IActionResult AddDishToOrder(TableViewModel model)
         {
-            _seeder.Seed(this);
-            if(model.TableJson != null)
-                model.Table = JsonConvert.DeserializeObject<Table>(model.TableJson);
+                var tableFromSession = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
+                model.Table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
 
             if(model != null && model.DishName != null && model.DishName != "Select Dish")
             {
@@ -68,8 +51,7 @@ namespace Waiter.Controllers
                     model.Table.Order.OrderPrice += model.Table.Order.Dishes.FirstOrDefault(d => d.DishName == model.DishName).DishPrice*model.Quantity;
                 }
             }
-            model.TableJson = JsonConvert.SerializeObject(model.Table);
-            HttpContext.Session.SetString(model.TableName, model.TableJson);
+            HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(model.Table));
             return View("Index", model);
         }
         [HttpPost]
@@ -90,9 +72,8 @@ namespace Waiter.Controllers
         [HttpPost]
         public IActionResult EditDish(TableViewModel model)
         {
-            _seeder.Seed(this);
-            if(model.TableJson != null)
-                model.Table = JsonConvert.DeserializeObject<Table>(model.TableJson);
+                model.Table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
+
             var dishVM = new DishViewModel(){
                 Dish = model.Table.Order.Dishes.FirstOrDefault(d => d.DishName == model.DishName),
                 TableName = model.Table.TableName
@@ -104,7 +85,6 @@ namespace Waiter.Controllers
         [HttpPost]
         public IActionResult AddOne(DishViewModel model)
         {
-            _seeder.Seed(this);
             var table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
             table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).Count++;
             table.Order.OrderPrice += table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishPrice;
@@ -115,7 +95,6 @@ namespace Waiter.Controllers
         [HttpPost]
         public IActionResult RemoveOne(DishViewModel model)
         {
-            _seeder.Seed(this);
             var table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
             if(model.Dish.Count > 0)
             {
@@ -129,25 +108,16 @@ namespace Waiter.Controllers
         [HttpPost]
         public IActionResult RemoveDish(DishViewModel model)
         {
-            _seeder.Seed(this);
             
             var table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
             var dish = table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName);
             table.Order.Dishes.Remove(dish);
             table.Order.OrderPrice -= dish.Count*dish.DishPrice;
-            // table.Order.Dishes.RemoveAt(dishIndex);
 
             HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
             model.Message = "You have succesfully removed the dish";
 
             return View("Details", model);
-        }
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

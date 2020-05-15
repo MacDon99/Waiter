@@ -1,4 +1,6 @@
-namespace Waiter.Models
+using Waiter.Models;
+
+namespace Waiter.ViewModels
 {
     public class DishViewModel
     {

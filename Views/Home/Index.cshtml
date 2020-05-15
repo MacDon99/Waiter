@@ -21,14 +21,13 @@
                     <br>
                     <label id = "selectedItem">Please select a table.</label>
                     <br>
-                    <input type="hidden">
-
                     <input id = "submitButton" type="submit" value="Get table info"><br>
                     
-                    @if(Model != null)
+                    @* @if(Model != null)
                     {
                         <input type="hidden" asp-for="TableJson" value="@Model.TableJson">
-                    }
+                    } *@
+                    
                 </form>
                 <hr><br>
 
@@ -44,9 +43,12 @@
                         <option id = "Third">Schnitzel with salad</option>
                         <option id = "Fourth">Hamburger</option>
                         <option id = "Fifth">Hot Dog</option>
-                    </select><br>
+                    </select>
+                    <br>
+                    <label id ="PriceLabel"></label>
+                    <br>
                     <input type="text" placeholder="Quantity" asp-for="Quantity" value=""><br>
-                    <input type = "hidden" asp-for="TableJson" value="@Model.TableJson">
+                    @* <input type = "hidden" asp-for="TableJson" value="@Model.TableJson"> *@
                     <input type = "hidden" asp-for="TableName" value="@Model.TableName"><br>
                     <input type = "submit" value="Add Dish to order">
                 </form>
@@ -54,11 +56,10 @@
                 <br>
                 @if(Model != null && Model.TableName != "Select Table")
                 {
-                    <input id = "saveButton" asp-action="GetTableInfo" asp-controller="Home" type="submit" value="Save" style="width: 100px; height: 40px;">
                     <hr>
                     <br>
                     <h4>Table name: @Model.TableName</h4>
-                    <h5>Price: @Model.Table.Price</h5>
+                    <h5>Price: @Model.Table.Order.OrderPrice</h5>
                     if(Model.Table.Order != null)
                     {
                         <div>
@@ -69,7 +70,8 @@
                                 <h5>Dish Name: @dish.DishName</h5>
                                 <h5>Dish Price: @dish.DishPrice</h5>
                                 <h5>Quantity: @dish.Count</h5>
-                                <input type="hidden" asp-for="TableJson" value="@Model.TableJson">
+                                @* <input type="hidden" asp-for="TableJson" value="@Model.TableJson"> *@
+                                <input type="hidden" asp-for="TableName" value = "@Model.TableName">
                                 <input type="hidden" asp-for="DishName" value="@dish.DishName">
                                 <input type="submit" value="Edit">
                             </form>
@@ -88,10 +90,56 @@
         $("#TableSelect").change( function() {
             $("#AddingDishes").hide()
         })
-
-        $("#saveButton").click( function() {
-            $("#AddingDishes").hide()
+        $("#DishSelect").change( function(){
+            if($("#DishSelect").children(":selected").attr("id") == "None")
+            {
+                $("#PriceLabel").text("")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "First")
+            {
+                $("#PriceLabel").text("Cost: 16.5 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Second")
+            {
+                $("#PriceLabel").text("Cost: 21.3 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Third")
+            {
+                $("#PriceLabel").text("Cost: 19.2 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Fourth")
+            {
+                $("#PriceLabel").text("Cost: 8.9 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Fifth")
+            {
+                $("#PriceLabel").text("Cost: 4.5 PLN")
+            }
         })
+        if($("#DishSelect").children(":selected").attr("id") == "None")
+            {
+                $("#PriceLabel").text("")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "First")
+            {
+                $("#PriceLabel").text("Cost: 16.5 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Second")
+            {
+                $("#PriceLabel").text("Cost: 21.3 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Third")
+            {
+                $("#PriceLabel").text("Cost: 19.2 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Fourth")
+            {
+                $("#PriceLabel").text("Cost: 8.9 PLN")
+            }
+            if($("#DishSelect").children(":selected").attr("id") == "Fifth")
+            {
+                $("#PriceLabel").text("Cost: 4.5 PLN")
+            }
         </script>
     }
 </div>

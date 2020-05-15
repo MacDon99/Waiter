@@ -1,6 +1,6 @@
-using Newtonsoft.Json;
+using Waiter.Models;
 
-namespace Waiter.Models
+namespace Waiter.ViewModels
 {
     public class TableViewModel
     {
@@ -8,13 +8,5 @@ namespace Waiter.Models
         public string DishName { get; set; }
         public int Quantity { get; set; }
         public Table Table { get; set; }
-
-        public string TableJson { get; set; }
-        public int DishId { get; set; }
-
-        public TableViewModel()
-        {
-
-        }
     }
 }

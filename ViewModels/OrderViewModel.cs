@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Waiter.Models
+namespace Waiter.ViewModels
 {
     public class OrderViewModel
     {

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Waiter.Models
 {
     public class Dish

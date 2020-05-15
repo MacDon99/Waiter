@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Waiter.Controllers;
 using Waiter.Data;
+using Waiter.Services;
+using Waiter.Services.Interfaces;
 
 namespace Waiter
 {
@@ -29,7 +31,10 @@ namespace Waiter
         {
             
             services.AddControllersWithViews();
-            services.AddScoped<Seeder>();
+            services.AddScoped<IDataService, DataService>();
+            services.AddScoped<IWaiterService, WaiterService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IPayService, PayService>();
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
             });

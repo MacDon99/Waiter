@@ -9,6 +9,7 @@
             <div class="col-sm text-center">
             </div>
             <div class="col-sm text-center">
+                <h5>Create new order</h5>
                 <select id ="DishSelect" asp-for="DishName">
                     <option id = "None">Select Dish</option>
                     <option id = "First">Chicken with fries</option>
@@ -25,7 +26,7 @@
             <div class="col-sm text-center">
             </div>
             <div class="col-sm text-center">
-                <input type="text" placeholder="Quantity" asp-for="Quantity"><br>
+                <input id = "quantityInput" type="number" step="0" placeholder="Quantity" asp-for="Quantity"><br>
             </div>
             <div class="col-sm text-center">
             </div>
@@ -41,28 +42,10 @@
                 <input type="checkbox" asp-for="TableFourth"><label>Fourth</label><br>
                 <input type="checkbox" asp-for="TableFifth"><label>Fifth</label><br>
                 </div>
-                <input type="submit" value="Create" style="width: 100px; height: 50px">
+                <input id = "submitButton" type="submit" value="Create" style="width: 100px; height: 50px">
             </div>
             <div class="col-sm text-center">
             </div>
         </div>
 </form>
-        @* <form>
-        <select id ="DishSelect" asp-for="DishName">
-            <option id = "None">Select Dish</option>
-            <option id = "First">Chicken with fries</option>
-            <option id = "Second">Fish with potatoes</option>
-            <option id = "Third">Schnitzel with salad</option>
-            <option id = "Fourth">Hamburger</option>
-            <option id = "Fifth">Hot Dog</option>
-        </select><br>
-        <input type="text" placeholder="Quantity"><br>
-        <input type="checkbox" asp-for="TableFirst" value="First"><label>First</label><br>
-        <input type="checkbox" asp-for="TableSecond" value="Second"><label>Second</label><br>
-        <input type="checkbox" asp-for="TableThird" value="Third"><label>Third</label><br>
-        <input type="checkbox" asp-for="TableFourth" value="Fourth"><label>Fourth</label><br>
-        <input type="checkbox" asp-for="TableFifth" value="Fifth"><label>Fifth</label><br>
-        <input type="submit" value="Create">
-    </form> *@
-
 </div>

@@ -10,8 +10,8 @@
         </div>
         <div class="col-sm text-center">
                 <form id="x" asp-controller="Home" asp-action="GetTableInfo">
+                    <h5>Select table</h5>
                     <select id ="TableSelect" asp-for="TableName" style="height: 30px;">
-                        <option id = "None">Select Table</option>
                         <option id = "First">First</option>
                         <option id = "Second">Second</option>
                         <option id = "Third">Third</option>
@@ -19,7 +19,6 @@
                         <option id = "Fifth">Fifth</option>
                     </select>
                     <br>
-                    <label id = "selectedItem">Please select a table.</label>
                     <br>
                     <input id = "submitButton" type="submit" value="Get table info"><br>
                     
@@ -47,7 +46,7 @@
                     <br>
                     <label id ="PriceLabel"></label>
                     <br>
-                    <input type="text" placeholder="Quantity" asp-for="Quantity" value=""><br>
+                    <input type="number" step="1" placeholder="Quantity" asp-for="Quantity" value=""><br>
                     @* <input type = "hidden" asp-for="TableJson" value="@Model.TableJson"> *@
                     <input type = "hidden" asp-for="TableName" value="@Model.TableName"><br>
                     <input type = "submit" value="Add Dish to order">
@@ -59,16 +58,16 @@
                     <hr>
                     <br>
                     <h4>Table name: @Model.TableName</h4>
-                    <h5>Price: @Model.Table.Order.OrderPrice</h5>
+                    <h5>Price: @Model.Table.Order.OrderPrice PLN</h5>
                     if(Model.Table.Order != null)
                     {
                         <div>
-                        <h5>Order price: @Model.Table.Order.OrderPrice</h5>
+                        <h5>Order price: @Model.Table.Order.OrderPrice PLN</h5>
                         @foreach (var dish in Model.Table.Order.Dishes)
                         {
                             <form asp-action="EditDish" asp-controller="Home" >
                                 <h5>Dish Name: @dish.DishName</h5>
-                                <h5>Dish Price: @dish.DishPrice</h5>
+                                <h5>Dish Price: @dish.DishPrice PLN</h5>
                                 <h5>Quantity: @dish.Count</h5>
                                 @* <input type="hidden" asp-for="TableJson" value="@Model.TableJson"> *@
                                 <input type="hidden" asp-for="TableName" value = "@Model.TableName">

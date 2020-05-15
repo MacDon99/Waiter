@@ -17,9 +17,13 @@ namespace Waiter.Services
         public DishViewModel ChangeDish(DishViewModel model)
         {
             var tableFromSession = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+            
             tableFromSession.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishName = model.NewDish;
+            
             _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(tableFromSession));
+            
             model.Dish = tableFromSession.Order.Dishes.FirstOrDefault(d => d.DishName == model.NewDish);
+            
             return model;
         }
 
@@ -38,10 +42,15 @@ namespace Waiter.Services
         public DishViewModel IncreaseDishPortions(DishViewModel model)
         {
             var table = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+
             table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).Count++;
+            
             table.Order.OrderPrice += table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishPrice;
+            
             _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
+            
             model.Dish.Count++;
+            
             return model;
         }
 
@@ -50,10 +59,10 @@ namespace Waiter.Services
             var table = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
             if(model.Dish.Count > 0)
             {
-            table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).Count--;
-            table.Order.OrderPrice -= table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishPrice;
-            _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
-            model.Dish.Count--;
+                table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).Count--;
+                table.Order.OrderPrice -= table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishPrice;
+                _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
+                model.Dish.Count--;
             }
             return model;
         }

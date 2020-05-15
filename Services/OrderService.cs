@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -37,8 +38,10 @@ namespace Waiter.Services
 
         public void CreateOrder(OrderViewModel model)
         {
+
             var dishFromSession = JsonConvert.DeserializeObject<Dish>(_httpContext.HttpContext.Session.GetString(model.DishName));
-            dishFromSession.Count = model.Quantity;
+
+                dishFromSession.Count = model.Quantity;
 
             List<string> tables = getTables(model);
 
@@ -105,6 +108,18 @@ namespace Waiter.Services
                 listToPass.Add("Fifth");
             }
             return listToPass;
+        }
+        private bool isItPossibleToGetIntFromRequestedVal(string value)
+        {
+            try
+            {
+                Convert.ToInt32(value);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

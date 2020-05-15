@@ -17,7 +17,9 @@ namespace Waiter.Services
         public PayViewModel BeginPaymentProcess(OrdersViewModel model)
         {
             var tableFromSession = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+            
             var tip = Math.Round(tableFromSession.Order.OrderPrice * 0.05M, 2);
+            
             return new PayViewModel(){
                 TableName = tableFromSession.TableName,
                 Order = tableFromSession.Order,
@@ -29,7 +31,9 @@ namespace Waiter.Services
         public void FinalizePayment(PayViewModel model)
         {
             var tableFromSession = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+            
             tableFromSession.Order = new Order();
+            
             _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(tableFromSession));
         }
     }

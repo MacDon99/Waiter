@@ -6,9 +6,9 @@ namespace Waiter.Services.Interfaces
 {
     public interface IOrderService
     {
-         OrdersViewModel DeleteOrder(OrdersViewModel model);
-         OrderViewModel CreateOrder(OrderViewModel model);
-        TableViewModel RemoveDishFromOrder(DishViewModel model);
-        TableViewModel AddDishToOrder(TableViewModel model);
+         void DeleteOrder(OrdersViewModel model);
+         void CreateOrder(OrderViewModel model);
+         DishViewModel RemoveDishFromOrder(DishViewModel model);
+         TableViewModel AddDishToOrder(TableViewModel model);
     }
 }

@@ -15,25 +15,71 @@ namespace Waiter.Services
         {
             _httpContext = httpContext;
         }
-
         public TableViewModel AddDishToOrder(TableViewModel model)
         {
-            throw new System.NotImplementedException();
+            var tableFromSession = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+                model.Table = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+
+            if(model != null && model.DishName != null && model.DishName != "Select Dish")
+            {
+                if(!model.Table.Order.Dishes.Any(d => d.DishName == model.DishName))
+                {
+                    Dish selectedDish = JsonConvert.DeserializeObject<Dish>(_httpContext.HttpContext.Session.GetString(model.DishName));
+                    model.Table.Order.AddDishToOrder(selectedDish, model.Quantity);
+                } else {
+                    model.Table.Order.Dishes.FirstOrDefault(d => d.DishName == model.DishName).Count+=model.Quantity;
+                    model.Table.Order.OrderPrice += model.Table.Order.Dishes.FirstOrDefault(d => d.DishName == model.DishName).DishPrice*model.Quantity;
+                }
+            }
+            _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(model.Table));
+            return model;
         }
 
-        public OrderViewModel CreateOrder(OrderViewModel model)
+        public void CreateOrder(OrderViewModel model)
         {
-            throw new System.NotImplementedException();
+            var dishFromSession = JsonConvert.DeserializeObject<Dish>(_httpContext.HttpContext.Session.GetString(model.DishName));
+            dishFromSession.Count = model.Quantity;
+
+            List<string> tables = getTables(model);
+
+            if(tables != null)
+            {
+                foreach(string table in tables)
+                {
+                    var tableFromSession = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(table));
+
+                    if(tableFromSession.Order.Dishes.Any(d => d.DishName == model.DishName))
+                    {
+                        tableFromSession.Order.Dishes.FirstOrDefault(d => d.DishName == model.DishName).Count += model.Quantity;
+                        tableFromSession.Order.OrderPrice += model.Quantity * dishFromSession.DishPrice;
+                        _httpContext.HttpContext.Session.SetString(table, JsonConvert.SerializeObject(tableFromSession));
+                    } else {
+                        tableFromSession.Order.Dishes.Add(dishFromSession);
+                        tableFromSession.Order.OrderPrice += model.Quantity * dishFromSession.DishPrice;
+                        _httpContext.HttpContext.Session.SetString(table, JsonConvert.SerializeObject(tableFromSession));
+                    }
+                }
+            }
         }
 
-        public OrdersViewModel DeleteOrder(OrdersViewModel model)
+        public void DeleteOrder(OrdersViewModel model)
         {
-            throw new System.NotImplementedException();
+            var tableFromSession = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+            tableFromSession.Order = new Order();
+            _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(tableFromSession));
         }
 
-        public TableViewModel RemoveDishFromOrder(DishViewModel model)
+        public DishViewModel RemoveDishFromOrder(DishViewModel model)
         {
-            throw new System.NotImplementedException();
+            var table = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+            var dish = table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName);
+            table.Order.Dishes.Remove(dish);
+            table.Order.OrderPrice -= dish.Count*dish.DishPrice;
+
+            _httpContext.HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
+            model.Message = "You have succesfully removed the dish";
+
+            return model;
         }
         private List<string> getTables(OrderViewModel model)
         {

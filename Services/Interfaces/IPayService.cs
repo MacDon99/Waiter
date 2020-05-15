@@ -4,7 +4,7 @@ namespace Waiter.Services.Interfaces
 {
     public interface IPayService
     {
-         OrdersViewModel BeginPaymentProcess(OrdersViewModel model);
-         PayViewModel FinalizePayment(PayViewModel model);
+         PayViewModel BeginPaymentProcess(OrdersViewModel model);
+         void FinalizePayment(PayViewModel model);
     }
 }

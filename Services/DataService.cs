@@ -35,12 +35,26 @@ namespace Waiter.Services
 
         public List<Table> GetAllTables()
         {
-            throw new System.NotImplementedException();
+            var orders = new List<Table>(){
+                    JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString("First")),
+                    JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString("Second")),
+                    JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString("Third")),
+                    JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString("Fourth")),
+                    JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString("Fifth")),
+                };
+            return orders;
         }
 
         public TableViewModel GetTableInformation(TableViewModel model)
         {
-            throw new System.NotImplementedException();
+            var tableFromSession = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+
+            if(model != null && model.TableName != null && model.TableName != "Select Table")
+            {
+            Table selectedTable = JsonConvert.DeserializeObject<Table>(_httpContext.HttpContext.Session.GetString(model.TableName));
+            model.Table = selectedTable;
+            }
+            return model;
         }
         private bool DoTablesExist(IHttpContextAccessor _httpContext)
         {

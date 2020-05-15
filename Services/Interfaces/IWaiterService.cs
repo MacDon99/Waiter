@@ -7,7 +7,7 @@ namespace Waiter.Services.Interfaces
          DishViewModel IncreaseDishPortions(DishViewModel model);
          DishViewModel LowerDishPortions(DishViewModel model);
          DishViewModel ChangeDish(DishViewModel model);
-         TableViewModel EditDish(TableViewModel model);
+         DishViewModel EditDish(TableViewModel model);
 
     }
 }

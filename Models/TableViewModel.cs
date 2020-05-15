@@ -10,6 +10,7 @@ namespace Waiter.Models
         public Table Table { get; set; }
 
         public string TableJson { get; set; }
+        public int DishId { get; set; }
 
         public TableViewModel()
         {

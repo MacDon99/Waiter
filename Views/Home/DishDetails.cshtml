@@ -1,0 +1,32 @@
+@model DishViewModel
+@{
+    ViewData["Title"] = "Tables";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+
+        </div>
+        <div class="col-sm text-center">
+            <form asp-action="ChangeDish" asp-controller="Home">
+                <h4>Select new dish</h4>
+                <select id ="DishSelect" asp-for="NewDish" style="height: 30px;" style="padding-top: 10px; padding-bottom: 10px;">
+                    <option id = "None">Select Dish</option>
+                    <option id = "First">Chicken with fries</option>
+                    <option id = "Second">Fish with potatoes</option>
+                    <option id = "Third">Schnitzel with salad</option>
+                    <option id = "Fourth">Hamburger</option>
+                    <option id = "Fifth">Hot Dog</option>
+                </select>
+                <input type="hidden" asp-for="TableName" value="@Model.TableName">
+                <input type="hidden" asp-for="Dish.DishName" value="@Model.Dish.DishName">
+
+                <input type="submit" value="Change dish">
+            </form>
+        </div>
+        <div class="col-sm">
+
+        </div>
+    </div>
+</div>

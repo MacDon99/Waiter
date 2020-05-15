@@ -7,7 +7,8 @@ namespace Waiter.Models
         public int Id { get; set; }
         public string TableName { get; set; }
         public Order Order { get; set; }
-        public decimal TotalPrice { get; set; }
+        public decimal Price { get; set; }
+        public decimal Tip { get; set; }
 
         public Table()
         {
@@ -15,7 +16,7 @@ namespace Waiter.Models
         }
         public void AddOrder(Order order)
         {
-            TotalPrice += order.OrderPrice;
+            Price += order.OrderPrice;
         }
     }
 }

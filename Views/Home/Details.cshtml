@@ -1,0 +1,44 @@
+@model DishViewModel
+@{
+    ViewData["Title"] = "Tables";
+}
+
+<div class="text-center">
+    @if(@Model.Message == null)
+    {
+    <h3><label>Table name: @Model.TableName</label><br></h3>
+    <h4><label>Dish name: @Model.Dish.DishName</label><br></h4>
+    <h4><label>Price: @Model.Dish.DishPrice</label><br></h4>
+    <h4><label>Quantity: @Model.Dish.Count</label></h4>
+
+    <form asp-action="BeginChangingDish" asp-controller="Home">
+        <input type="hidden" asp-for="Dish.DishName" value="@Model.Dish.DishName">
+        <input type="hidden" asp-for="TableName" value="@Model.TableName">
+        <input type="submit" value="Change dish" style="width: 120px; height:40px;">
+    </form>
+    <form asp-action="AddOne" asp-controller="Home">
+        <input type="hidden" asp-for="Dish.DishName" value="@Model.Dish.DishName">
+        <input type="hidden" asp-for="Dish.DishPrice" value="@Model.Dish.DishPrice">
+        <input type="hidden" asp-for="Dish.Count" value="@Model.Dish.Count">
+        <input type="hidden" asp-for="TableName" value="@Model.TableName">
+        <input type="submit" value="+" style="width: 120px; height:40px;">
+    </form>
+    <form asp-action="RemoveOne" asp-controller="Home">
+        <input type="hidden" asp-for="Dish.DishName" value="@Model.Dish.DishName">
+        <input type="hidden" asp-for="Dish.DishPrice" value="@Model.Dish.DishPrice">
+        <input type="hidden" asp-for="Dish.Count" value="@Model.Dish.Count">
+        <input type="hidden" asp-for="TableName" value="@Model.TableName">
+        <input type="submit" value="-" style="width: 120px; height:40px;">
+    </form>
+    <form asp-action="RemoveDish" asp-controller="Home">
+        <input type="hidden" asp-for="Dish.DishName" value="@Model.Dish.DishName">
+        <input type="hidden" asp-for="Dish.DishPrice" value="@Model.Dish.DishPrice">
+        <input type="hidden" asp-for="Dish.Count" value="@Model.Dish.Count">
+        <input type="hidden" asp-for="Dish.Id" value="@Model.Dish.Id">
+        <input type="hidden" asp-for="TableName" value="@Model.TableName">
+        <input type="submit" value="Remove dish" style="width: 120px; height:40px;">
+    </form>
+    } else {
+        <h5>@Model.Message</h5>
+    }
+</div>

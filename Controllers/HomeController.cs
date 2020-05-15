@@ -69,8 +69,80 @@ namespace Waiter.Controllers
                 }
             }
             model.TableJson = JsonConvert.SerializeObject(model.Table);
+            HttpContext.Session.SetString(model.TableName, model.TableJson);
             return View("Index", model);
         }
+        [HttpPost]
+        public IActionResult BeginChangingDish(DishViewModel model)
+        {
+            return View("DishDetails", model);
+        }
+        [HttpPost]
+        public IActionResult ChangeDish(DishViewModel model)
+        {
+            var tableFromSession = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
+            tableFromSession.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishName = model.NewDish;
+            HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(tableFromSession));
+            model.Dish = tableFromSession.Order.Dishes.FirstOrDefault(d => d.DishName == model.NewDish);
+            return View("Details", model);
+        }
+
+        [HttpPost]
+        public IActionResult EditDish(TableViewModel model)
+        {
+            _seeder.Seed(this);
+            if(model.TableJson != null)
+                model.Table = JsonConvert.DeserializeObject<Table>(model.TableJson);
+            var dishVM = new DishViewModel(){
+                Dish = model.Table.Order.Dishes.FirstOrDefault(d => d.DishName == model.DishName),
+                TableName = model.Table.TableName
+            };
+            HttpContext.Session.SetString(model.Table.TableName, JsonConvert.SerializeObject(model.Table));
+            return View("Details", dishVM);
+        }
+
+        [HttpPost]
+        public IActionResult AddOne(DishViewModel model)
+        {
+            _seeder.Seed(this);
+            var table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
+            table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).Count++;
+            table.Order.OrderPrice += table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishPrice;
+            HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
+            model.Dish.Count++;
+            return View("Details", model);
+        }
+        [HttpPost]
+        public IActionResult RemoveOne(DishViewModel model)
+        {
+            _seeder.Seed(this);
+            var table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
+            if(model.Dish.Count > 0)
+            {
+            table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).Count--;
+            table.Order.OrderPrice -= table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName).DishPrice;
+            HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
+            model.Dish.Count--;
+            }
+            return View("Details", model);
+        }
+        [HttpPost]
+        public IActionResult RemoveDish(DishViewModel model)
+        {
+            _seeder.Seed(this);
+            
+            var table = JsonConvert.DeserializeObject<Table>(HttpContext.Session.GetString(model.TableName));
+            var dish = table.Order.Dishes.FirstOrDefault(d => d.DishName == model.Dish.DishName);
+            table.Order.Dishes.Remove(dish);
+            table.Order.OrderPrice -= dish.Count*dish.DishPrice;
+            // table.Order.Dishes.RemoveAt(dishIndex);
+
+            HttpContext.Session.SetString(model.TableName, JsonConvert.SerializeObject(table));
+            model.Message = "You have succesfully removed the dish";
+
+            return View("Details", model);
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

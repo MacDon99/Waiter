@@ -1,0 +1,34 @@
+@model PayViewModel
+@{
+    ViewData["Title"] = "Tables";
+}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-sm">
+            
+        </div>
+        <div class="col-sm">
+            <hr>
+            <h4>Table name: @Model.TableName</h4><br>
+            <h4>Dishes:</h4><br>
+            @foreach (var dish in Model.Order.Dishes)
+            {
+                <h5>Dish: @dish.DishName</h5>
+                <h6>Price per one: @dish.DishPrice</h6>
+                <h6>Quantity: @dish.Count</h6><br>
+            }
+            <hr>
+            <h4>Price: @Model.Order.OrderPrice</h4><br>
+            <h4>Tip: @Model.Tip</h4><br>
+            <h4>Total price: @Model.Price</h4><br>
+            <form asp-action="FinalizePayment" asp-controller="Orders">
+                <input type="hidden" asp-for="TableName" value="@Model.TableName">
+                <input type="submit" value="Pay" style="width: 150px; height: 60px;">
+            </form>
+        </div>
+        <div class="col-sm">
+           
+        </div>
+    </div>
+</div>

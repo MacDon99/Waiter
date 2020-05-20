@@ -20,7 +20,7 @@
             }
             <hr>
             <h4>Price: @Model.Order.OrderPrice PLN</h4><br>
-            <h4>Tip: @Model.Tip PLN</h4><br>
+            <h4>Tip 5%: @Model.Tip PLN</h4><br>
             <h4>Total price: @Model.Price PLN</h4><br>
             <form asp-action="FinalizePayment" asp-controller="Orders">
                 <input type="hidden" asp-for="TableName" value="@Model.TableName">

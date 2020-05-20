@@ -22,34 +22,43 @@
                     <br>
                     <input id = "submitButton" type="submit" value="Get table info"><br>
                     
-                    @* @if(Model != null)
-                    {
-                        <input type="hidden" asp-for="TableJson" value="@Model.TableJson">
-                    } *@
-                    
                 </form>
                 <hr><br>
 
             <div id="AddingDishes" type = "hidden">
-
                 @if(Model != null && Model.TableName != "Select Table" && Model.Table != null)
                 {
                 <form asp-action="AddDishToOrder" asp-controller="Home">
-                    <select id ="DishSelect" asp-for="DishName" style="height: 30px;" style="padding-top: 10px; padding-bottom: 10px;">
-                        <option id = "None">Select Dish</option>
-                        <option id = "First">Chicken with fries</option>
-                        <option id = "Second">Fish with potatoes</option>
-                        <option id = "Third">Schnitzel with salad</option>
-                        <option id = "Fourth">Hamburger</option>
-                        <option id = "Fifth">Hot Dog</option>
-                    </select>
-                    <br>
-                    <label id ="PriceLabel"></label>
-                    <br>
-                    <input type="number" step="1" placeholder="Quantity" asp-for="Quantity" value=""><br>
-                    @* <input type = "hidden" asp-for="TableJson" value="@Model.TableJson"> *@
+                    
+                    <div style="text-align:left;">
+                        <input id="chickenCheckBox" type="checkbox" asp-for="DishSelect.isChickenSelected"><label>Chicken with fries</label><br>
+                        <div id="chickenData">
+                            <input id="chickenQuantity" type="number" step="0" min="0" asp-for="DishSelect.ChickenQuantity" placeholder="Quantity"><br>
+                            <label id ="chickenPriceLabel">16.5 PLN</label><br>
+                        </div>
+                        <input id="fishCheckBox" type="checkbox" asp-for="DishSelect.isFishSelected"><label>Fish with potatoes</label><br>
+                        <div id="fishData">
+                            <input id="fishQuantity" type="number" step="0" min="0" asp-for="DishSelect.FishQuantity" placeholder="Quantity"><br>
+                            <label id ="fishPriceLabel">21.3 PLN</label><br>
+                        </div>
+                        <input id="schnitzelCheckBox" type="checkbox" asp-for="DishSelect.isSchnitzelSelected"><label>Schnitzel with salad</label><br>
+                        <div id="schnitzelData">
+                            <input id="schnitzelQuantity" type="number" step="0" min="0" asp-for="DishSelect.SchnitzelQuantity" placeholder="Quantity"><br>
+                            <label id ="schnitzelPriceLabel">19.2 PLN</label><br>
+                        </div>
+                        <input id="hamburgerCheckBox" type="checkbox" asp-for="DishSelect.isHamburgerSelected"><label>Hamburger</label><br>
+                        <div id="hamburgerData">
+                            <input id="hamburgerQuantity" type="number" step="0" min="0" asp-for="DishSelect.HamburgerQuantity" placeholder="Quantity"><br>
+                            <label id ="hamburgerPriceLabel">8.9 PLN</label><br>
+                        </div>
+                        <input id="hotDogCheckBox" type="checkbox" asp-for="DishSelect.isHotDogSelected"><label>Hot Dog</label><br>
+                        <div id="hotDogData">
+                            <input id="hotDogQuantity" type="number" step="0" min="0" asp-for="DishSelect.HotDogQuantity" placeholder="Quantity"><br>
+                            <label id ="HotDogPriceLabel">4.5 PLN</label>
+                        </div>
+                    </div>
                     <input type = "hidden" asp-for="TableName" value="@Model.TableName"><br>
-                    <input type = "submit" value="Add Dish to order">
+                    <input id="addDishesBtn" type = "submit" value="Add Dishes to order">
                 </form>
                 }
                 <br>
@@ -58,7 +67,6 @@
                     <hr>
                     <br>
                     <h4>Table name: @Model.TableName</h4>
-                    <h5>Price: @Model.Table.Order.OrderPrice PLN</h5>
                     if(Model.Table.Order != null)
                     {
                         <div>
@@ -69,7 +77,6 @@
                                 <h5>Dish Name: @dish.DishName</h5>
                                 <h5>Dish Price: @dish.DishPrice PLN</h5>
                                 <h5>Quantity: @dish.Count</h5>
-                                @* <input type="hidden" asp-for="TableJson" value="@Model.TableJson"> *@
                                 <input type="hidden" asp-for="TableName" value = "@Model.TableName">
                                 <input type="hidden" asp-for="DishName" value="@dish.DishName">
                                 <input type="submit" value="Edit">
@@ -89,56 +96,63 @@
         $("#TableSelect").change( function() {
             $("#AddingDishes").hide()
         })
-        $("#DishSelect").change( function(){
-            if($("#DishSelect").children(":selected").attr("id") == "None")
-            {
-                $("#PriceLabel").text("")
+        $("#chickenCheckBox").change(function() {
+            if(this.checked) {
+                $("#chickenData").show()
+            } else {
+                $("#chickenData").hide()
             }
-            if($("#DishSelect").children(":selected").attr("id") == "First")
-            {
-                $("#PriceLabel").text("Cost: 16.5 PLN")
+        });
+        $("#fishCheckBox").change(function() {
+            if(this.checked) {
+                $("#fishData").show()
+            } else {
+                $("#fishData").hide()
             }
-            if($("#DishSelect").children(":selected").attr("id") == "Second")
-            {
-                $("#PriceLabel").text("Cost: 21.3 PLN")
+        });
+        $("#schnitzelCheckBox").change(function() {
+            if(this.checked) {
+                $("#schnitzelData").show()
+            } else {
+                $("#schnitzelData").hide()
             }
-            if($("#DishSelect").children(":selected").attr("id") == "Third")
-            {
-                $("#PriceLabel").text("Cost: 19.2 PLN")
+        });
+        $("#hamburgerCheckBox").change(function() {
+            if(this.checked) {
+                $("#hamburgerData").show()
+            } else {
+                $("#hamburgerData").hide()
             }
-            if($("#DishSelect").children(":selected").attr("id") == "Fourth")
-            {
-                $("#PriceLabel").text("Cost: 8.9 PLN")
+        });
+        $("#hotDogCheckBox").change(function() {
+            if(this.checked) {
+                $("#hotDogData").show()
+            } else {
+                $("#hotDogData").hide()
             }
-            if($("#DishSelect").children(":selected").attr("id") == "Fifth")
-            {
-                $("#PriceLabel").text("Cost: 4.5 PLN")
-            }
-        })
-        if($("#DishSelect").children(":selected").attr("id") == "None")
-            {
-                $("#PriceLabel").text("")
-            }
-            if($("#DishSelect").children(":selected").attr("id") == "First")
-            {
-                $("#PriceLabel").text("Cost: 16.5 PLN")
-            }
-            if($("#DishSelect").children(":selected").attr("id") == "Second")
-            {
-                $("#PriceLabel").text("Cost: 21.3 PLN")
-            }
-            if($("#DishSelect").children(":selected").attr("id") == "Third")
-            {
-                $("#PriceLabel").text("Cost: 19.2 PLN")
-            }
-            if($("#DishSelect").children(":selected").attr("id") == "Fourth")
-            {
-                $("#PriceLabel").text("Cost: 8.9 PLN")
-            }
-            if($("#DishSelect").children(":selected").attr("id") == "Fifth")
-            {
-                $("#PriceLabel").text("Cost: 4.5 PLN")
-            }
+        });
+
+        if(!$('#chickenCheckBox').prop('checked')){
+            $("#chickenData").hide()
+        }
+        if(!$('#fishCheckBox').prop('checked')){
+            $("#fishData").hide()
+        }
+        if(!$('#schnitzelCheckBox').prop('checked')){
+            $("#schnitzelData").hide()
+        }
+        if(!$('#hamburgerCheckBox').prop('checked')){
+            $("#hamburgerData").hide()
+        }
+        if(!$('#hotDogCheckBox').prop('checked')){
+            $("#hotDogData").hide()
+        }
+
+        $("#chickenQuantity").val(0)
+        $("#fishQuantity").val(0)
+        $("#schnitzelQuantity").val(0)
+        $("#hamburgerQuantity").val(0)
+        $("#hotDogQuantity").val(0)
         </script>
     }
 </div>

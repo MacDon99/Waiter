@@ -10,14 +10,34 @@
             </div>
             <div class="col-sm text-center">
                 <h5>Create new order</h5>
-                <select id ="DishSelect" asp-for="DishName">
-                    <option id = "None">Select Dish</option>
-                    <option id = "First">Chicken with fries</option>
-                    <option id = "Second">Fish with potatoes</option>
-                    <option id = "Third">Schnitzel with salad</option>
-                    <option id = "Fourth">Hamburger</option>
-                    <option id = "Fifth">Hot Dog</option>
-                </select>
+                    <h6>Select dish and quantity</h6>
+                    <div style="text-align:left;">
+                        <input id="chickenCheckBox" type="checkbox" asp-for="DishSelect.isChickenSelected"><label>Chicken with fries</label><br>
+                        <div id="chickenData">
+                            <input id="chickenQuantity" type="number" step="0" min="0" asp-for="DishSelect.ChickenQuantity" placeholder="Quantity"><br>
+                            <label id ="chickenPriceLabel">16.5 PLN</label><br>
+                        </div>
+                        <input id="fishCheckBox" type="checkbox" asp-for="DishSelect.isFishSelected"><label>Fish with potatoes</label><br>
+                        <div id="fishData">
+                            <input id="fishQuantity" type="number" step="0" min="0" asp-for="DishSelect.FishQuantity" placeholder="Quantity"><br>
+                            <label id ="fishPriceLabel">21.3 PLN</label><br>
+                        </div>
+                        <input id="schnitzelCheckBox" type="checkbox" asp-for="DishSelect.isSchnitzelSelected"><label>Schnitzel with salad</label><br>
+                        <div id="schnitzelData">
+                            <input id="schnitzelQuantity" type="number" step="0" min="0" asp-for="DishSelect.SchnitzelQuantity" placeholder="Quantity"><br>
+                            <label id ="schnitzelPriceLabel">19.2 PLN</label><br>
+                        </div>
+                        <input id="hamburgerCheckBox" type="checkbox" asp-for="DishSelect.isHamburgerSelected"><label>Hamburger</label><br>
+                        <div id="hamburgerData">
+                            <input id="hamburgerQuantity" type="number" step="0" min="0" asp-for="DishSelect.HamburgerQuantity" placeholder="Quantity"><br>
+                            <label id ="hamburgerPriceLabel">8.9 PLN</label><br>
+                        </div>
+                        <input id="hotDogCheckBox" type="checkbox" asp-for="DishSelect.isHotDogSelected"><label>Hot Dog</label><br>
+                        <div id="hotDogData">
+                            <input id="hotDogQuantity" type="number" step="0" min="0" asp-for="DishSelect.HotDogQuantity" placeholder="Quantity"><br>
+                            <label id ="HotDogPriceLabel">4.5 PLN</label>
+                        </div>
+                    </div>
             </div>
             <div class="col-sm text-center">
             </div>
@@ -26,7 +46,7 @@
             <div class="col-sm text-center">
             </div>
             <div class="col-sm text-center">
-                <input id = "quantityInput" type="number" step="0" placeholder="Quantity" asp-for="Quantity"><br>
+                <h6>Select Table</h6>
             </div>
             <div class="col-sm text-center">
             </div>
@@ -36,11 +56,11 @@
             </div>
             <div class="col-sm text-center">
                 <div style="text-align: left;">
-                <input type="checkbox" asp-for="TableFirst"><label>First</label><br>
-                <input type="checkbox" asp-for="TableSecond"><label>Second</label><br>
-                <input type="checkbox" asp-for="TableThird"><label>Third</label><br>
-                <input type="checkbox" asp-for="TableFourth"><label>Fourth</label><br>
-                <input type="checkbox" asp-for="TableFifth"><label>Fifth</label><br>
+                <input type="checkbox" asp-for="TableSelect.isTableFirstChecked"><label>First</label><br>
+                <input type="checkbox" asp-for="TableSelect.isTableSecondChecked"><label>Second</label><br>
+                <input type="checkbox" asp-for="TableSelect.isTableThirdChecked"><label>Third</label><br>
+                <input type="checkbox" asp-for="TableSelect.isTableFourthChecked"><label>Fourth</label><br>
+                <input type="checkbox" asp-for="TableSelect.isTableFifthChecked"><label>Fifth</label><br>
                 </div>
                 <input id = "submitButton" type="submit" value="Create" style="width: 100px; height: 50px">
             </div>
@@ -48,4 +68,59 @@
             </div>
         </div>
 </form>
+@section scripts{
+    <script>
+        $("#chickenCheckBox").change(function() {
+            if(this.checked) {
+                $("#chickenData").show()
+            } else {
+                $("#chickenData").hide()
+            }
+        });
+        $("#fishCheckBox").change(function() {
+            if(this.checked) {
+                $("#fishData").show()
+            } else {
+                $("#fishData").hide()
+            }
+        });
+        $("#schnitzelCheckBox").change(function() {
+            if(this.checked) {
+                $("#schnitzelData").show()
+            } else {
+                $("#schnitzelData").hide()
+            }
+        });
+        $("#hamburgerCheckBox").change(function() {
+            if(this.checked) {
+                $("#hamburgerData").show()
+            } else {
+                $("#hamburgerData").hide()
+            }
+        });
+        $("#hotDogCheckBox").change(function() {
+            if(this.checked) {
+                $("#hotDogData").show()
+            } else {
+                $("#hotDogData").hide()
+            }
+        });
+
+        if(!$('#chickenCheckBox').prop('checked')){
+            $("#chickenData").hide()
+        }
+        if(!$('#fishCheckBox').prop('checked')){
+            $("#fishData").hide()
+        }
+        if(!$('#schnitzelCheckBox').prop('checked')){
+            $("#schnitzelData").hide()
+        }
+        if(!$('#hamburgerCheckBox').prop('checked')){
+            $("#hamburgerData").hide()
+        }
+        if(!$('#hotDogCheckBox').prop('checked')){
+            $("#hotDogData").hide()
+        }
+    </script>
+}
 </div>
